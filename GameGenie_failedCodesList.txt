@@ -1,631 +1,262 @@
 //////////////////////////////////
 Failed Codes or Junk Data...
 ////////////////////////////////
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
-e in C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //////////////////////////////////
 Failed Codes or Junk Data...
 ////////////////////////////////
