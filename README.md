@@ -5,7 +5,7 @@ GameGenie in C Language , use of efficient algorithms and reducing time complexi
 
 GameGenie Encoder :
 It Generates 6 or 8 character GameGenie based on whether input has compare value or not.
-it encodes GameGenieCode based on Address and Value based in HEX Values.
+it encodes GameGenieCode based on Input Address and Value or Compare Values.
 
 GameGenie Decoder :
 It decodes 6-character GameGenie to Address and data.
