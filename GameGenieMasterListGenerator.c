@@ -23,19 +23,15 @@
 #define GAME_GENIE_TABLE_LEN 16 //MAX GameGenie Table Length.
 
 //Generates All Possible Combinations using this input.
-char GameGenieInput[] = "XING"; //Change here for different input.
+char GameGenieInput[] = "ANXZG"; //Change here for different inputs.
 
 //Default input is set to 4-Character combination but input could be between 2 to 16 Chars combination long taken from GameGenieTable.
 
 //"APZLGITYEOXUKSVN" this is example of 16-Chars string for MAX Input.
 
 /*
-Output of 16-char MAX input .
-
-File Created : GameGenieMasterList.txt
-16777216 GameGenieCodes Written in File
-Time Taken = 126.064000 seconds
-File Size : 895 MB (MegaBytes)
+Output of 16-char MAX input . could be very large File around greater than 20GB or so.
+so to open big text file use 'EmEditor' it can handle very large text files easily.
 */
 
 //GameGenie Code Table.
