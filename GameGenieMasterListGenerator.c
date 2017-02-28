@@ -23,7 +23,7 @@
 #define GAME_GENIE_TABLE_LEN 16 //MAX GameGenie Table Length.
 
 //Generates All Possible Combinations using this input.
-char GameGenieInput[] = "ANXZG"; //Change here for different inputs.
+char GameGenieInput[] = "ANXG"; //Change here for different inputs.
 
 //Default input is set to 4-Character combination but input could be between 2 to 16 Chars combination long taken from GameGenieTable.
 
