@@ -1,7 +1,7 @@
 # GameGenie_in_C
-GameGenie Encoder Decoder and Master List Generator  in C.
+GameGenie Encoder/Decoder and Master List Generator in C.
 
-GameGenie Ported to C from Various sources , use of efficent algorithms and reducing time complexity thus making it more efficient.
+GameGenie in C Language , use of efficient algorithms and reducing time complexity thus making it more efficient.
 
 GameGenie Encoder :
 It Generates 6 or 8 character GameGenie based on whether input has compare value or not.
