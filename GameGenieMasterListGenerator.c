@@ -9,23 +9,25 @@
 //code could be found here https://github.com/Jsdemonsim/Stackoverflow/blob/master/alphabet/alphabet.c
 
 //Including Standard Libraries.
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <time.h>
+#include <stdio.h> //For Standatd I/O Operations.
+#include <stdlib.h> //For Exit() Function.
+#include <string.h> //For strrev() and strlen() functions.
+#include <stdbool.h> //For _Bool Boolean.
+#include <ctype.h> //For isUpper(). isLower()
+#include <time.h> //For Clock .
+#include <math.h> //For pow().
 
 //Defining Constants in form of Macros.
 #define NO_OF_CHARS 256 //For Ducplicate Inputs. 
-#define GAME_GENIE_LEN 6 //MAX Length of GameGenie Code, Don't edit this.
+#define GAME_GENIE_LEN 8 //MAX Length of GameGenie Code, Don't edit this.
 #define GAME_GENIE_TABLE_LEN 16 //MAX GameGenie Table Length.
 
 //Generates All Possible Combinations using this input.
-char GameGenieInput[] = "APZLG"; //Change here for different input.
+char GameGenieInput[] = "XING"; //Change here for different input.
 
-//Default input is set to 5-Chars combination but input could be between 2 to 16 Chars combination long taken from GameGenieTable.
+//Default input is set to 4-Character combination but input could be between 2 to 16 Chars combination long taken from GameGenieTable.
 
-//"APZLGITYEOXUKSVN" this is 16-Chars string for MAX Input.
+//"APZLGITYEOXUKSVN" this is example of 16-Chars string for MAX Input.
 
 /*
 Output of 16-char MAX input .
@@ -36,63 +38,84 @@ Time Taken = 126.064000 seconds
 File Size : 895 MB (MegaBytes)
 */
 
-
 //GameGenie Code Table.
-char GameGenieTable[GAME_GENIE_TABLE_LEN] =
+const char GameGenieTable[GAME_GENIE_TABLE_LEN] =
 {
     'A','P','Z','L','G','I','T','Y',
     'E','O','X','U','K','S','V','N',
 }; //Master GameGenie Table.
 
-short n0,n1,n2,n3,n4,n5; //Contains HEX equivalent of GameGenie Character from GameGenieTable.
-
+short n0,n1,n2,n3,n4,n5,n6,n7; //Contains HEX of GameGenieCode, n0 = 1st Char ... n7 = 8th GameGenie Character.  
+static _Bool is_8_Char_GameGenie = false; //Checking for 8-Character GameGenie Code.
+int _count_6Char = 0,_count_8Char = 0,_failedCount = 0; //Counters for 6 or 8 Char GameGenieCode and counter for failedCode. 
 
 //Jsdemonsim's written Alphabet Generation Algorithm .
 static void generate_combinations(int);
 
-//GameGenie Data & Address. Routines.
-void generateGameGenieList(char*);
+//GameGenieCode subroutines.
+void generateGameGenieList(char*,int);
 int checkGameGenieCode(char *);
+int getGameGenieLen();
+
+//GameGenie value & Address. Routines.
 int decodeGameGenieCode(char *);
 int decodeGameGenieAddress();
-int decodeGameGenieData();
+int decodeGameGenieValue();
+int decodeGameGenieCompare();
 
 //For Checking duplicate  & Wrong Inputs.
 int check_input(char *);
 _Bool check_duplicates(char *);
 char *remove_duplicates(char *);
-void caseToUpper(char *);
+
+//Converting Input to UpperCase if needed.
+_Bool isInputLower(char	*str);
+void toUpperCase(char *);
+
+//Printing Title to Files.
+void printFileTitle();
 
 //Global variables.
-int TotalCodes = 0; //Count the Total number of Codes.
-FILE *fp; //FilePointer to MasterList File.
+long long TotalCodes = 0; //Count the Total number of Codes Generated.
+FILE *_fp_6Char_GG,*_fp_8Char_GG,*_fp_failedCodes; //FilePointer to GameGenieCodes and FailedCodes File.
 
 int main()
 {
+					
     //Creating Timer to count time elapsed while generating MasterList .
     clock_t start;
     double time_used;
     start = clock();
-
+    
+				//Holds the Total Possbile codes depends on 'N' length of Input.
+				long long totalPossibleCodes = (pow(getGameGenieLen(),6) + pow(getGameGenieLen(),8));
     char *New_Input;//Holds the New_Input after removing duplicates from GameGenieInput.
+								
+    //Creating Three Files to Hold 6 or 8 GameGenie Codes and failedCodes for any failed Code not generated .
+    char GameGenie_6Char[] = "GameGenie_6_CharsList.txt"; //For 6-Character GameGenie.
+				char GameGenie_8Char[] = "GameGenie_8_CharsList.txt"; //For 8-Character GameGenie.
+				char GameGenie_failedCodes[] = "GameGenie_failedCodesList.txt"; //For Failed Codes or Junk Data.
 
-    char GameGenieCodesFile[] = "GameGenieMasterList.txt";
-
-    //Creating File to Hold All GameGenie Codes.
-    fp = fopen(GameGenieCodesFile, "w");
-    if (fp == NULL)
+				//Always Open File in Write Mode. 
+    _fp_6Char_GG = fopen(GameGenie_6Char, "w");
+    _fp_8Char_GG = fopen(GameGenie_8Char, "w");
+    _fp_failedCodes = fopen(GameGenie_failedCodes, "w");
+    
+    //Checking for failed Memory allocation.
+    if (_fp_6Char_GG == NULL || _fp_8Char_GG == NULL || _fp_failedCodes == NULL)
     {
         perror("Error : "); //Perror Automatically detects the type of error occured and prints that error.
         exit(1); //Exit with Error.
     }
-
+								
     //Convert Input to UpperCase if it isn't already.
-    caseToUpper(GameGenieInput);
+ 		if(isInputLower(GameGenieInput))
+				toUpperCase(GameGenieInput);
 
     //Checking  for Wrong Input, Length In-Range and for Duplicates.
     if(check_input(GameGenieInput))
     {
-        if(strlen(GameGenieInput) > 1 && strlen(GameGenieInput) < GAME_GENIE_TABLE_LEN)
+        if(getGameGenieLen() > 1 && getGameGenieLen() <= GAME_GENIE_TABLE_LEN)
         {
 
             //Check for Duplicate Inputs before generating all combinations.
@@ -113,7 +136,14 @@ int main()
                     printf("Duplicates were removed from Input.\nNew Input is : %s\n",New_Input);
             }
 
-            //Generates All the Possbile Combination of GameGenieList with MAX_Length_GameGenie.
+													//Prints Waiting Message for Large Inputs.
+													if(getGameGenieLen() > 5)
+													 printf("Generating GameGenie Codes Please Wait...");
+            
+            //Prints Title to all Files before Genrating Codes.
+            printFileTitle();
+            
+												//Generates All the Possbile Combinations of using GameGenieTable.
             generate_combinations(GAME_GENIE_LEN);
         }
 
@@ -130,13 +160,27 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-
+				
     time_used = ((double) (clock() - start)) / CLOCKS_PER_SEC;
-    printf("\nFile Created : %s\n%d GameGenieCodes Written in File.\n\nTime Taken = %f seconds\n",GameGenieCodesFile,TotalCodes,time_used);
+    _failedCount =  totalPossibleCodes - TotalCodes;
+    printf("\nFiles Created Successfully :\n\n%s\n%s\n%s\n\n",GameGenie_6Char,GameGenie_8Char,GameGenie_failedCodes);
+				
+				printf("Codes Summary :\n\n");
+				printf("6-Character GameGenieCodes Generated : %d\n",_count_6Char);
+				printf("8-Character GameGenieCodes Generated : %d\n",_count_8Char);
+				printf("Total GameGenieCodes Generated : %d\n\n",TotalCodes);			
+					
+				printf("GameGenieCodes Failed to Generate : %d\n",_failedCount);
+				printf("Time Taken = %f seconds\n\n",time_used);
 
-//Close the file handle.
-    fclose(fp);
-
+				//Print Title at the End also.
+				printFileTitle();
+				
+    //Close the File handles.
+    fclose(_fp_6Char_GG);
+				fclose(_fp_8Char_GG);
+				fclose(_fp_failedCodes);
+				
     return EXIT_SUCCESS;
 }
 
@@ -159,7 +203,7 @@ static void generate_combinations(int maxlen)
 
     // This for loop generates all 1 letter patterns, then 2 letters, etc,
     // up to the given maxlen.
-    for (len=1; len<=maxlen; len++)
+    for (len=6; len<=maxlen; len++)
     {
         // The stride is one larger than len because each line has a '\n'.
         int i;
@@ -179,7 +223,7 @@ static void generate_combinations(int maxlen)
             }
 
             //Generates GameGenieCodes with Current Buffer.
-            generateGameGenieList(buffer);
+            generateGameGenieList(buffer,bufLen);
 
             continue;
         }
@@ -209,7 +253,7 @@ static void generate_combinations(int maxlen)
         }
 
         //Generates GameGenieCodes with Current Buffer.
-        generateGameGenieList(buffer);
+        generateGameGenieList(buffer,bufLen);
 
         // Special case for length 2, we're already done.
         if (len == 2)
@@ -244,7 +288,7 @@ static void generate_combinations(int maxlen)
                 // Write out this set.  Reset i back to third to last letter.
 
                 //Generates GameGenieCodes with Current Buffer.
-                generateGameGenieList(buffer);
+                generateGameGenieList(buffer,bufLen);
 
                 i = len - 3;
                 continue;
@@ -267,10 +311,10 @@ static void generate_combinations(int maxlen)
 }
 
 //Generates GameGenie MasterList.
-void generateGameGenieList(char *CodeGenieBuffer)
+void generateGameGenieList(char *CodeGenieBuffer,int buffLen)
 {
-
-    int GG_CodeCount = 0,i = 0;
+	
+	int GG_CodeCount = 0,i = 0;
 
     //Calculating Number of GameGenie Codes present in current CodeGenie Buffer.
     while(CodeGenieBuffer[i])
@@ -282,20 +326,30 @@ void generateGameGenieList(char *CodeGenieBuffer)
 
         i++;
     }
-
-
-    //Filter 6-digits Game Genie codes only.
-    if( (strlen(CodeGenieBuffer) / GG_CodeCount ) == GAME_GENIE_LEN + 1)
-    {
-        // CodeBuffer Length / No. of Codes in Buffer is equal to 6-Digit GameGenieCode :)
-
-        char GameGenieCode[6] = {0x0};//Contains 6-digit GameGenie Code from large generated code Buffer.
-        int index = 0,BufferIndex = 0,CodeGenieIndex = 0,CodeGenieCount = 0,CodeGenieLen = 0;
-
-        //Code Buffer has some -ve Values junk strings at the end. Don't copy them.
+	
+				//printf("GG_CodeCount = %d , bufflen = %d , (buffLen by GG_CodeCount) = %d\n",GG_CodeCount,buffLen,(buffLen / GG_CodeCount));
+												
+				if((buffLen	/ GG_CodeCount) == 8) //Skips for 7-Character Buffer Generated.
+				return ; //Return Control back.
+				
+				else{
+																		    				        
+				//Contains Total number of Codes in Buffer and their length.
+				int index = 0,BufferIndex = 0,CodeGenieIndex = 0,CodeGenieCount = 0,CodeGenieLen = 0;
+				
+				//Contains 6 or 8-character GameGenie Code from large generated code Buffer.
+			 char GameGenieCode[ (is_8_Char_GameGenie == true) ? (sizeof (char) * 8) : (sizeof (char) * 6)];
+				 memset(GameGenieCode,'\0',sizeof(GameGenieCode)); //Setting 0 as initial value.		
+						
+									//Checking 8-Char GameGenie for Every Buffer.
+									if((buffLen / GG_CodeCount) == GAME_GENIE_LEN	+ 1)
+    									is_8_Char_GameGenie = true;
+	    
+											
+        //Code Buffer has some -ve Values junk strings at the end. Don't process them.
         while(CodeGenieBuffer[index] > 0)
         {
-
+        	
             //Count the Seperate GameGenie Codes from Large Code Chunks.
             if(CodeGenieBuffer[index] == '\n')
             {
@@ -304,54 +358,94 @@ void generateGameGenieList(char *CodeGenieBuffer)
             }
 
             //Reset the CodeGenie Index counter.
-            if(CodeGenieIndex >= 6) CodeGenieIndex = 0;
-
+            if(CodeGenieIndex >= (is_8_Char_GameGenie ? 8 : 6)) 
+												 CodeGenieIndex = 0;
+												
+																								
             //If we have reached the First/Second and so on GameGenieCode in Buffer then copy that specific code.
             if(CodeGenieCount == BufferIndex)
             {
                 GameGenieCode[CodeGenieIndex] = CodeGenieBuffer[index];
                 CodeGenieLen++;
             }
-
+            
+            //Insert Null dont let any junk data to be processed further.
+												 GameGenieCode[8] = '\0';	
+												
             //Checking length of CodeGenie.
-            if(CodeGenieLen == (6 * (BufferIndex+1) ) )
+            if(CodeGenieLen == ((is_8_Char_GameGenie ? 8 : 6) * (BufferIndex+1) ))
             {
-                //After every 6 chars there is '\n' from which we are keeping track of individual GameGenieCode.
-
+                //After every 6 or 8 chars there is '\n' from which we are keeping track of individual GameGenieCode.
+																	
                 if(decodeGameGenieCode(GameGenieCode))
                 {
-                    //Writes all the GameGenieCodes to File.
-                    fprintf(fp,"GameGenieCode = %s\n",GameGenieCode); //Prints current GameGenieCode.
-                    fprintf(fp, "Address = 0x%x\n",decodeGameGenieAddress()); //Prints Address in Hex.
-                    fprintf(fp, "Data = %x\n",decodeGameGenieData()); //Prints Data in Hex.
-                    fprintf(fp,"\n");
-
-                    //Counter for Total Number of Codes.
+                				//If it's 6-Character GameGenie Code.
+																				if(!is_8_Char_GameGenie){
+																				//Writes all the GameGenieCodes to File.
+                    fprintf(_fp_6Char_GG,"GameGenieCode = %s\n",GameGenieCode); //Prints current GameGenieCode.
+                    fprintf(_fp_6Char_GG, "Address = 0x%x\n",decodeGameGenieAddress()); //Prints Address in Hex.
+                    fprintf(_fp_6Char_GG, "value = %x\n",decodeGameGenieValue()); //Prints value in Hex.
+                    fprintf(_fp_6Char_GG,"\n");	
+																				_count_6Char++;
+																				}
+                    
+                    //If it's 8-Character GameGenie Code.
+                    if(is_8_Char_GameGenie){        
+																				 //Writes all the GameGenieCodes to File.
+                    fprintf(_fp_8Char_GG,"GameGenieCode = %s\n",GameGenieCode); //Prints current GameGenieCode.
+                    fprintf(_fp_8Char_GG, "Address = 0x%x\n",decodeGameGenieAddress()); //Prints Address in Hex.
+                    fprintf(_fp_8Char_GG, "value = %x\n",decodeGameGenieValue()); //Prints value in Hex.            
+                    fprintf(_fp_8Char_GG, "compare = %x\n",decodeGameGenieCompare()); //Prints Compare Value in Hex.
+                    fprintf(_fp_8Char_GG,"\n");
+																				_count_8Char++;
+																				}
+																																																						
+                    //Counting for Total Number of Codes Generated.
                     TotalCodes++;
-
-                    /*Use this when you need to print on console.
-
-                    printf("\nAddress = 0x%x\n",decodeGameGenieAddress());
-                    printf("Data = %x\n",decodeGameGenieData());
-                    printf("GameGenieCode = %s\n",GameGenieCode);
-                    */
-
                 }
 
-                //Checking for any Junk Data in CodeBuffer.
+                //Writing for any Failed GameGenie Code or Any Junk Data.
                 else
-                    printf("\n%s is not a valid GameGenie Code\n",GameGenieCode);
-
-                //Incrimenting index.
+                 fprintf(_fp_failedCodes,"%s\n",GameGenieCode);
+                    //printf("\n%s is not a valid GameGenie Code\n",GameGenieCode);
+														
+                //Incrementing Bufferindex.
                 BufferIndex++;
             }
 
-            //Incrimenting indexes.
+            //Incrementing index and CodeGenieIndex.
             index++;
             CodeGenieIndex++;
         }
-    }
+            
+				}
+}
 
+//decode GameGenieCode.
+int decodeGameGenieCode(char *GameGenieCode)
+{
+
+    int i = 0,j = 0,found = 0;
+				
+    for(i = 0; i < (is_8_Char_GameGenie ? 8 : 6) ; i++)
+    {
+    for(j = 0; j < GAME_GENIE_TABLE_LEN; j++)
+	 if(GameGenieCode[i] == GameGenieTable[j]){
+	 found ++;
+	 
+	 //Twirling Ternary operators to convert Game Genie to its equivalent Hex.
+		(found == 1) ? n0 = j : (found == 2) ? n1 = j : 
+		(found == 3) ? n2 = j : (found == 4) ? n3 = j : 
+		(found == 5) ? n4 = j : (found == 6) ? n5 = j :j;
+		
+		
+			(is_8_Char_GameGenie) ? (found == 7 ? n6 = j : found == 8 ? n7 = j : j) : j;
+		  	 
+	 }
+ }
+ 
+ //Checking for Invalid Genie Codes. 
+ return (found == (is_8_Char_GameGenie ? 8 : 6)) ? 1 : 0;
 }
 
 //decodes GameGenieAddress
@@ -368,39 +462,37 @@ int decodeGameGenieAddress()
 
 }
 
-//decodes GameGenieData.
-int decodeGameGenieData()
-{
-
-    int data =
-        ((n1 & 7) << 4) | ((n0 & 8) << 4)
-        | (n0 & 7)       |  (n5 & 8);
-
-    return data;
+//decodes GameGenievalue.
+//Decodes Value from 6 or 8-Char GameGenie Code.
+int decodeGameGenieValue(){
+	
+ int value;
+	
+	//Checking if it's 8-Char_GameGenie Code.
+	(is_8_Char_GameGenie == true) 
+	
+ //Value of 8-Char GameGenie.
+	? (value =
+             ((n1 & 7) << 4) | ((n0 & 8) << 4)
+            | (n0 & 7)       |  (n7 & 8)) 
+	
+		//Value of 6-Char GameGenie.
+	: (value =
+             ((n1 & 7) << 4) | ((n0 & 8) << 4)
+            | (n0 & 7)       |  (n5 & 8) );
+  
+ return value;
 }
 
-//decode GameGenieCode.
-int decodeGameGenieCode(char *GameGenieCode)
-{
 
-    int i = 0,j = 0,found = 0;
-
-    for(i = 0; i < GAME_GENIE_LEN ; i++)
-    {
-        for(j = 0; j < GAME_GENIE_TABLE_LEN; j++)
-            if(GameGenieCode[i] == GameGenieTable[j])
-            {
-                found ++;
-
-                //Twirling Ternary operators to convert Game Genie to its equivalent Hex.
-                (found == 1) ? n0 = j : (found == 2) ? n1 = j :
-                                    (found == 3) ? n2 = j : (found == 4) ? n3 = j :
-                                                        (found == 5) ? n4 = j : (found == 6) ? n5 = j :j;
-            }
-    }
-
-//Checking for Invalid Genie Codes.
-    return (found == 6) ? 1 : 0;
+//Decodes Compare Value for 8-Char GameGenie Code.
+int decodeGameGenieCompare(){
+	
+	      int  compare =
+             ((n7 & 7) << 4) | ((n6 & 8) << 4)
+            | (n6 & 7)       |  (n5 & 8);
+      return compare;      
+	
 }
 
 //Check the GameGenieInput.
@@ -499,8 +591,21 @@ char *remove_duplicates(char *str)
     return str;
 }
 
+//Checking if Input is in Lower Case.
+_Bool isInputLower(char	*str){
+	
+	int index = 0;
+	
+	for(index = 0; index < strlen(str); index++){
+		if(islower(str[index]))
+		 return true;
+	}
+		
+		return false;
+}
+
 //Converts the Input to Capital case.
-void caseToUpper(char *str)
+void toUpperCase(char *str)
 {
 
     int index = 0;
@@ -517,4 +622,23 @@ void caseToUpper(char *str)
         index++;
     }
 
+}
+
+//Get Length of GameGenie Code.
+int getGameGenieLen(){
+	return strlen(GameGenieInput);
+}
+
+//Prints Title on Respective Files.
+void printFileTitle(){
+	
+	//For 6-Char GameGenie Codes.
+	fprintf(_fp_6Char_GG,"%s\n","/////////////////////////////////\n6-Character Game Genie Codes...\n////////////////////////////////");	
+	
+	//For 8-Char GameGenie Codes.
+	fprintf(_fp_8Char_GG,"%s\n","//////////////////////////////////\n8-Character Game Genie Codes...\n////////////////////////////////");
+	
+	//For Failed Game Genie Codes.
+	fprintf(_fp_failedCodes,"%s\n","//////////////////////////////////\nFailed Codes or Junk Data...\n////////////////////////////////");
+										
 }
