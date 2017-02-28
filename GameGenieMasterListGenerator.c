@@ -23,16 +23,16 @@
 #define GAME_GENIE_TABLE_LEN 16 //MAX GameGenie Table Length.
 
 //Generates All Possible Combinations using this input.
-char GameGenieInput[] = "ANXG"; //Change here for different inputs.
+char *GameGenieInput = NULL; //Store the Input.
 
-//Default input is set to 4-Character combination but input could be between 2 to 16 Chars combination long taken from GameGenieTable.
-
+//Input could be between 2 to 16 Character combination long taken from GameGenieTable.
 //"APZLGITYEOXUKSVN" this is example of 16-Chars string for MAX Input.
 
 /*
-Output of 16-char MAX input . could be very large File around greater than 20GB or so.
-so to open big text file use 'EmEditor' it can handle very large text files easily.
+Output of 16-char MAX input . could be very large File around greater than 30GB or so.
+To open big text file use 'EmEditor' it can handle very large text files easily.
 */
+
 
 //GameGenie Code Table.
 const char GameGenieTable[GAME_GENIE_TABLE_LEN] =
@@ -43,10 +43,13 @@ const char GameGenieTable[GAME_GENIE_TABLE_LEN] =
 
 short n0,n1,n2,n3,n4,n5,n6,n7; //Contains HEX of GameGenieCode, n0 = 1st Char ... n7 = 8th GameGenie Character.  
 static _Bool is_8_Char_GameGenie = false; //Checking for 8-Character GameGenie Code.
-int _count_6Char = 0,_count_8Char = 0,_failedCount = 0; //Counters for 6 or 8 Char GameGenieCode and counter for failedCode. 
+long long _count_6Char = 0,_count_8Char = 0; //Counters for 6 or 8 Char GameGenieCodes. 
 
 //Jsdemonsim's written Alphabet Generation Algorithm .
 static void generate_combinations(int);
+
+//Reading Input.
+char* readGameGenieInput();
 
 //GameGenieCode subroutines.
 void generateGameGenieList(char*,int);
@@ -72,25 +75,35 @@ void toUpperCase(char *);
 void printFileTitle();
 
 //Global variables.
-long long TotalCodes = 0; //Count the Total number of Codes Generated.
+long long TotalCodesGenerated = 0; //Count the Total number of Codes Generated.
 FILE *_fp_6Char_GG,*_fp_8Char_GG,*_fp_failedCodes; //FilePointer to GameGenieCodes and FailedCodes File.
 
 int main()
 {
+	
+				//Reading Input to generate GameGenie Codes.
+				
+				printf("Master Table for Refrence : %s\n",GameGenieTable);
+				printf("\nEnter Combination of Characters from Master Table (MAX 16-Chars)\n");
+				GameGenieInput = readGameGenieInput();
+
+					
+					//Holds the Total Possbile codes depends on 'N' length of Input.
+				 #define MAX_CODES_POSSIBLE ((long long)pow(getGameGenieLen(),6) + (long long)pow(getGameGenieLen(),8))
+ 				#define _count_failedCodes  (MAX_CODES_POSSIBLE - TotalCodesGenerated)
 					
     //Creating Timer to count time elapsed while generating MasterList .
     clock_t start;
     double time_used;
     start = clock();
     
-				//Holds the Total Possbile codes depends on 'N' length of Input.
-				long long totalPossibleCodes = (pow(getGameGenieLen(),6) + pow(getGameGenieLen(),8));
+    
     char *New_Input;//Holds the New_Input after removing duplicates from GameGenieInput.
 								
     //Creating Three Files to Hold 6 or 8 GameGenie Codes and failedCodes for any failed Code not generated .
-    char GameGenie_6Char[] = "GameGenie_6_CharsList.txt"; //For 6-Character GameGenie.
-				char GameGenie_8Char[] = "GameGenie_8_CharsList.txt"; //For 8-Character GameGenie.
-				char GameGenie_failedCodes[] = "GameGenie_failedCodesList.txt"; //For Failed Codes or Junk Data.
+    char *GameGenie_6Char = "GameGenie_6_CharsList.txt"; //For 6-Character GameGenie.
+				char *GameGenie_8Char = "GameGenie_8_CharsList.txt"; //For 8-Character GameGenie.
+				char *GameGenie_failedCodes = "GameGenie_failedCodesList.txt"; //For Failed Codes or Junk Data.
 
 				//Always Open File in Write Mode. 
     _fp_6Char_GG = fopen(GameGenie_6Char, "w");
@@ -103,7 +116,7 @@ int main()
         perror("Error : "); //Perror Automatically detects the type of error occured and prints that error.
         exit(1); //Exit with Error.
     }
-								
+												
     //Convert Input to UpperCase if it isn't already.
  		if(isInputLower(GameGenieInput))
 				toUpperCase(GameGenieInput);
@@ -134,7 +147,7 @@ int main()
 
 													//Prints Waiting Message for Large Inputs.
 													if(getGameGenieLen() > 5)
-													 printf("Generating GameGenie Codes Please Wait...");
+													 printf("\nGenerating GameGenie Codes Please Wait...");
             
             //Prints Title to all Files before Genrating Codes.
             printFileTitle();
@@ -158,15 +171,14 @@ int main()
 
 				
     time_used = ((double) (clock() - start)) / CLOCKS_PER_SEC;
-    _failedCount =  totalPossibleCodes - TotalCodes;
     printf("\nFiles Created Successfully :\n\n%s\n%s\n%s\n\n",GameGenie_6Char,GameGenie_8Char,GameGenie_failedCodes);
 				
 				printf("Codes Summary :\n\n");
-				printf("6-Character GameGenieCodes Generated : %d\n",_count_6Char);
-				printf("8-Character GameGenieCodes Generated : %d\n",_count_8Char);
-				printf("Total GameGenieCodes Generated : %d\n\n",TotalCodes);			
+				printf("6-Character GameGenieCodes Generated : %llu\n",_count_6Char);
+				printf("8-Character GameGenieCodes Generated : %llu\n",_count_8Char);
+				printf("Total GameGenieCodes Generated : %llu\n\n",MAX_CODES_POSSIBLE);			
 					
-				printf("GameGenieCodes Failed to Generate : %d\n",_failedCount);
+				printf("GameGenieCodes Failed to Generate : %lld\n",(long long)fabs(_count_failedCodes));
 				printf("Time Taken = %f seconds\n\n",time_used);
 
 				//Print Title at the End also.
@@ -178,6 +190,46 @@ int main()
 				fclose(_fp_failedCodes);
 				
     return EXIT_SUCCESS;
+}
+
+
+//Reading Input Max 16-Character long combinations.
+char *readGameGenieInput() {
+    char *buf, *tmp_p;
+        int i, c;
+ 
+        i = 0;
+        buf = (char*)malloc(sizeof(char));
+        if (buf == NULL)
+                return NULL;
+ 
+        c = fgetc(stdin);
+ 							
+ 							int char_count = 1; //Counter to check if Input is greater than MAX_GAME_GENIE_LEN.
+ 							
+ 							//Read input one by one untill Newline or EOF Occurs.
+ 							//Dont read input after 8 char_count.
+ 							
+        while (	char_count	> 0 && char_count	<= GAME_GENIE_TABLE_LEN	 && c != '\n' && c != EOF) {
+ 							
+                buf[i++] = c;
+                tmp_p = buf;
+                buf = (char*)realloc(buf, (i + 1) * sizeof(char));
+                if (buf == NULL) {
+                        free(tmp_p);
+                        return NULL;
+                }
+                c = fgetc(stdin);
+                char_count++; //Count Every Char untill value will become equal to MAX_GAME_GENIE_LEN.
+        }
+ 
+        if (i == 0) {
+                free(buf);
+                return NULL;
+        }
+ 
+        buf[i] = '\0';
+        return buf;
 }
 
 
@@ -197,10 +249,10 @@ static void generate_combinations(int maxlen)
         exit(EXIT_FAILURE);
     }
 
-    // This for loop generates all 1 letter patterns, then 2 letters, etc,
-    // up to the given maxlen.
-    for (len=6; len<=maxlen; len++)
+    // This for loop generates 6 and 8 Character Combinations for GameGenie Codes.
+    for (len=6; len<=maxlen; len+=2)
     {
+   	
         // The stride is one larger than len because each line has a '\n'.
         int i;
         int stride = len+1;
@@ -323,12 +375,6 @@ void generateGameGenieList(char *CodeGenieBuffer,int buffLen)
         i++;
     }
 	
-				//printf("GG_CodeCount = %d , bufflen = %d , (buffLen by GG_CodeCount) = %d\n",GG_CodeCount,buffLen,(buffLen / GG_CodeCount));
-												
-				if((buffLen	/ GG_CodeCount) == 8) //Skips for 7-Character Buffer Generated.
-				return ; //Return Control back.
-				
-				else{
 																		    				        
 				//Contains Total number of Codes in Buffer and their length.
 				int index = 0,BufferIndex = 0,CodeGenieIndex = 0,CodeGenieCount = 0,CodeGenieLen = 0;
@@ -397,7 +443,7 @@ void generateGameGenieList(char *CodeGenieBuffer,int buffLen)
 																				}
 																																																						
                     //Counting for Total Number of Codes Generated.
-                    TotalCodes++;
+                    TotalCodesGenerated++;
                 }
 
                 //Writing for any Failed GameGenie Code or Any Junk Data.
@@ -413,8 +459,6 @@ void generateGameGenieList(char *CodeGenieBuffer,int buffLen)
             index++;
             CodeGenieIndex++;
         }
-            
-				}
 }
 
 //decode GameGenieCode.
